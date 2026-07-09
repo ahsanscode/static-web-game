@@ -1,0 +1,101 @@
+.container-1, .container-2, .container-3, .container-4, .container-5 {
+    border: 1px solid black;
+    width: 75%;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.flex-box-container-1, .flex-box-container-2, .flex-bj-row1, .flex-bj-row2, .flex-bj-row3 {
+    display: flex;
+    border: 1px solid black;
+    padding: 10px;
+    flex-direction: row;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+.flex-box-container-1 div {
+    display: flex;
+    padding: 10px;
+    border: 1px solid black;
+    align-items: center;
+}
+
+.flex-box-container-2 img {
+    padding: 10px;
+    width: 30%;
+    box-shadow: 0px 10px 50px rgb(0, 0, 0, 0.7);
+    margin-top: 20px;
+}
+
+.flex-box-rps img:hover {
+    padding: 2px;
+    margin: 5px 5px;
+}
+
+.flex-box-rps img:hover {
+    padding: 5px;
+    box-shadow: 0px 10px 50px rgb(0, 0, 0, 0.7);
+    margin: 10px 10px;
+}
+
+.container-4 div {
+    border: none;
+}
+
+.flex-bj-row1, .flex-bj-row2 {
+    background: url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRgHmNYkl-irJVYakbP6WGd4aMsAi7zZ4CdSw&s");
+    color: white;
+    background-repeat: no-repeat;
+    background-size: cover;
+
+}
+
+.flex-bj-row1 div {
+    border: 1px solid black;
+    padding: 10px;
+    flex: 1;
+    text-align: center;
+    min-height: 350px;
+
+}
+
+.flex-bj-row1 img {
+    width: 25%;
+    padding: 10%;
+}
+
+.flex-bj-row2 button {
+    border: 1px solid black;
+    padding: 10px;
+}
+
+.flex-bj-row2 div {
+    border: 1px solid black;
+    padding: 10px;
+}
+
+.container-5 table, td, th {
+    padding: 5px;
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+.container-5 img {
+    padding: 0.4%;
+    margin: 0.4%;
+    width: 10vw;
+    background-color: white;
+    height: auto;
+    max-height: 13vw ;
+
+}
+
+
+
+
+
+
+
+
+

@@ -35,11 +35,30 @@ function reset() {
 }
 
 
+let imgGenCount = 0;
+
 function creat_img() {
-    var image = document.createElement('img');
-    var div = document.getElementById('img_append');
-    image.src = "http://thecatapi.com/api/images/get?format=src&type=gif&size=small";
+    const div = document.getElementById('img_append');
+    imgGenCount++;
+
+    // Unique token per click so the browser never re-serves a cached image.
+    const unique = Date.now() + '-' + imgGenCount;
+
+    const image = document.createElement('img');
+    image.className = 'generated-img';
+    image.alt = 'Random cat #' + imgGenCount;
+    // A fresh random cat every click; fall back to Lorem Picsum if the cat API is down.
+    image.src = 'https://cataas.com/cat?width=280&height=280&unique=' + unique;
+    image.onerror = function () {
+        this.onerror = null; // avoid loops if the fallback also fails
+        this.src = 'https://picsum.photos/280/280?random=' + unique;
+    };
+
     div.appendChild(image);
+    // Keep the gallery tidy — show the most recent few images.
+    while (div.children.length > 6) {
+        div.removeChild(div.firstElementChild);
+    }
 }
 
 function randint() {

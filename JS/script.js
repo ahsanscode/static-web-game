@@ -55,10 +55,7 @@ function creat_img() {
     };
 
     div.appendChild(image);
-    // Keep the gallery tidy — show the most recent few images.
-    while (div.children.length > 6) {
-        div.removeChild(div.firstElementChild);
-    }
+    // The gallery grows downward; the container's height expands to fit (see CSS).
 }
 
 function randint() {
@@ -70,43 +67,11 @@ function botchoise(num) {
 }
 
 
-function determineWinner(userChoice, computerChoice) {
-    if (userChoice === computerChoice) {
-        return "It's a draw!";
-    }
-
-    if (userChoice === 'rock') {
-        if (computerChoice === 'scissors') {
-            return 'You win!';
-        } else {
-            return 'You lose!';
-        }
-    }
-
-    if (userChoice === 'paper') {
-        if (computerChoice === 'rock') {
-            return 'You win!';
-        } else {
-            return 'You lose!';
-        }
-    }
-
-    if (userChoice === 'scissors') {
-        if (computerChoice === 'paper') {
-            return 'You win!';
-        } else {
-            return 'You lose!';
-        }
-    }
-}
-
-
-function addImageToDiv(div, src) {
-    const img = document.createElement('img'); // Create img element
-    img.src = src; // Set the src attribute
-    img.width = 150;
-    img.height = 150;
-    div.appendChild(img); // Append img to the div
+// Returns 'win' | 'lose' | 'draw' from the player's point of view.
+function rpsOutcome(user, computer) {
+    if (user === computer) return 'draw';
+    const beats = { rock: 'scissors', paper: 'rock', scissors: 'paper' };
+    return beats[user] === computer ? 'win' : 'lose';
 }
 
 function srcx(botchoice) {
@@ -121,25 +86,52 @@ function srcx(botchoice) {
 }
 
 
+let rpsScore = { you: 0, cpu: 0, draw: 0 };
+
+function renderRpsScore() {
+    document.getElementById('rps-you-score').textContent = rpsScore.you;
+    document.getElementById('rps-cpu-score').textContent = rpsScore.cpu;
+    document.getElementById('rps-draw-score').textContent = rpsScore.draw;
+}
+
 function game(yourChoice) {
-    var humen, bot;
-    humen = yourChoice.alt;
-    bot = botchoise(randint());
-    const result = determineWinner(humen, bot);
-    document.getElementById('flex-box-rps').innerHTML = '';
-    const humendiv = document.createElement('div');
-    humendiv.appendChild(yourChoice);
-    document.getElementById('flex-box-rps').appendChild(humendiv);
-    const resultdiv = document.createElement('div');
-    const h1 = document.createElement('h1');
-    h1.innerHTML = result;
-    resultdiv.appendChild(h1);
-    document.getElementById('flex-box-rps').appendChild(resultdiv);
+    const human = yourChoice.alt;                 // 'rock' | 'paper' | 'scissors'
+    const bot = botchoise(randint());
+    const outcome = rpsOutcome(human, bot);       // 'win' | 'lose' | 'draw'
 
-    const botdiv = document.createElement('div');
-    addImageToDiv(botdiv, srcx(bot));
-    document.getElementById('flex-box-rps').appendChild(botdiv);
+    // Keep score.
+    if (outcome === 'win') rpsScore.you++;
+    else if (outcome === 'lose') rpsScore.cpu++;
+    else rpsScore.draw++;
+    renderRpsScore();
 
+    // Show the round below the (still-clickable) choices.
+    const verdict = outcome === 'win' ? 'You win!' : outcome === 'lose' ? 'You lose!' : "It's a draw!";
+    const result = document.getElementById('rps-result');
+    result.innerHTML =
+        '<figure class="rps-pick">' +
+            '<img src="' + yourChoice.src + '" alt="' + human + '">' +
+            '<figcaption>You · ' + human + '</figcaption>' +
+        '</figure>' +
+        '<div class="rps-verdict ' + outcome + '">' + verdict + '</div>' +
+        '<figure class="rps-pick">' +
+            '<img src="' + srcx(bot) + '" alt="' + bot + '">' +
+            '<figcaption>CPU · ' + bot + '</figcaption>' +
+        '</figure>';
+    result.classList.add('show');
+    // Re-trigger the pop animation each round.
+    result.style.animation = 'none';
+    void result.offsetWidth;
+    result.style.animation = '';
+}
+
+// Reset the match back to its default state.
+function rps_reset() {
+    rpsScore = { you: 0, cpu: 0, draw: 0 };
+    renderRpsScore();
+    const result = document.getElementById('rps-result');
+    result.innerHTML = '';
+    result.classList.remove('show');
 }
 
 

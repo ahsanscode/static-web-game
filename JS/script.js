@@ -124,7 +124,9 @@ function game(yourChoice) {
 }
 
 
-var all_buttons = document.getElementsByTagName('button');
+// Scope the colour-changer to its own game section so it doesn't
+// repaint unrelated buttons elsewhere on the page.
+var all_buttons = document.querySelectorAll('#colors button');
 var copybtns = [];
 for (let i = 0; i < all_buttons.length; i++) {
     copybtns.push(all_buttons[i].classList[1]);

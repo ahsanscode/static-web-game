@@ -6,12 +6,92 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="CSS/style.css">
-    <title>JS practice</title>
+    <title>ARCADE.JS — Vanilla JavaScript Game Collection</title>
 </head>
 <body>
 
-<div class="container-1">
+<nav class="top-nav">
+    <a class="brand" href="#top"><span class="dot"></span>ARCADE<span>.JS</span></a>
+    <div class="nav-links">
+        <a class="hot" href="#fighting">Fighting</a>
+        <a href="#blackjack">Blackjack</a>
+        <a href="#rps">Rock·Paper·Scissors</a>
+        <a href="#colors">Buttons</a>
+        <a href="#imagegen">Image Gen</a>
+        <a href="#age">Age</a>
+    </div>
+</nav>
+
+<header class="hero" id="top">
+    <div class="eyebrow">Vanilla JS · No frameworks</div>
+    <h1>ARCADE.JS</h1>
+    <p class="lead">A neon collection of hand-built browser games and toys — now with a
+        two-player <strong>King of Fighters</strong> brawler. Pure HTML, CSS &amp; JavaScript.</p>
+    <div class="hero-cta">
+        <a class="btn-neon pink" href="#fighting">▶ Play the Fighter</a>
+        <a class="btn-neon ghost" href="#blackjack">Browse all games</a>
+    </div>
+</header>
+
+<main>
+
+<!-- ============================ FIGHTING GAME ============================ -->
+<section class="container-fight" id="fighting">
+    <div class="section-tag new">New · 2 Players</div>
+    <h2>King of Fighters — Arena</h2>
+    <p class="section-sub">Grab a friend, share the keyboard, settle it in the best of three.</p>
+
+    <div class="fight-stage">
+        <div class="fight-hud">
+            <div class="hud-player">
+                <div class="hud-top"><span style="color:var(--cyan)">KYO</span>
+                    <span class="pips" id="p1-pips"></span></div>
+                <div class="health-bar"><div class="health-fill" id="p1-health"></div></div>
+            </div>
+            <div class="hud-timer" id="fight-timer">60</div>
+            <div class="hud-player right">
+                <div class="hud-top"><span style="color:var(--pink)">IORI</span>
+                    <span class="pips" id="p2-pips"></span></div>
+                <div class="health-bar"><div class="health-fill" id="p2-health"></div></div>
+            </div>
+        </div>
+
+        <canvas id="fight-canvas" width="960" height="440"></canvas>
+
+        <div class="fight-overlay" id="fight-overlay">
+            <div class="fight-overlay-inner">
+                <h3 id="fight-msg">King of Fighters</h3>
+                <p id="fight-sub">Local 2-player · Best of three</p>
+                <button class="btn-neon pink" id="fight-start">FIGHT!</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="controls-grid">
+        <div class="control-card p1">
+            <h4>◈ Player 1 — KYO</h4>
+            <div class="key-row"><span>Move</span><span class="keys"><kbd>A</kbd><kbd>D</kbd></span></div>
+            <div class="key-row"><span>Jump</span><span class="keys"><kbd>W</kbd></span></div>
+            <div class="key-row"><span>Block / Crouch</span><span class="keys"><kbd>S</kbd></span></div>
+            <div class="key-row"><span>Punch</span><span class="keys"><kbd>F</kbd></span></div>
+            <div class="key-row"><span>Kick</span><span class="keys"><kbd>G</kbd></span></div>
+        </div>
+        <div class="control-card p2">
+            <h4>◈ Player 2 — IORI</h4>
+            <div class="key-row"><span>Move</span><span class="keys"><kbd>J</kbd><kbd>L</kbd></span></div>
+            <div class="key-row"><span>Jump</span><span class="keys"><kbd>I</kbd></span></div>
+            <div class="key-row"><span>Block / Crouch</span><span class="keys"><kbd>K</kbd></span></div>
+            <div class="key-row"><span>Punch</span><span class="keys"><kbd>O</kbd></span></div>
+            <div class="key-row"><span>Kick</span><span class="keys"><kbd>P</kbd></span></div>
+        </div>
+    </div>
+</section>
+
+<div class="container-1" id="age">
     <h2>Your Age in Days</h2>
     <div class="flex-box-container-1">
         <div>
@@ -29,14 +109,14 @@
 </div>
 
 
-<div class="container-2">
+<div class="container-2" id="imagegen">
     <h2>Image Generator</h2>
     <button class="btn btn-success" id="img_gen" onclick="creat_img()">Generate Image</button>
     <div class="flex-box-container-2" id="img_append">
     </div>
 </div>
-<div class="container-3">
-    <h2>Rock paper scissor game</h2>
+<div class="container-3" id="rps">
+    <h2>Rock · Paper · Scissors</h2>
     <div class="flex-box-rps flex-box-container-1" id="flex-box-rps">
         <div>
             <img src="data:image/jpeg;base64,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"
@@ -56,8 +136,8 @@
 </div>
 
 
-<div class="container-4">
-    <h1>Change the buttons color</h1>
+<div class="container-4" id="colors">
+    <h1>Change the Buttons Color</h1>
     <div class="button-container-color">
         <label for="colorDropdown">Choose a color:</label>
         <form action="">
@@ -87,7 +167,7 @@
     </div>
 </div>
 
-<div class="container-5">
+<div class="container-5" id="blackjack">
     <h1>Black Jack Game</h1>
     <h3><span id="finalresult">Let's play</span></h3>
     <div class="flex-bj-row1">
@@ -125,7 +205,15 @@
 </div>
 
 
-<script src="JS\script.js"></script>
+</main>
+
+<footer class="site-footer">
+    <p><strong>ARCADE.JS</strong> — built with vanilla HTML, CSS &amp; JavaScript. No frameworks, no build step.</p>
+    <p>Tip: the fighting game is best played on a keyboard with two players.</p>
+</footer>
+
+<script src="JS/script.js"></script>
+<script src="JS/fighting.js"></script>
 
 
 </body>

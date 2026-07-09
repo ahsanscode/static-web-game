@@ -1,2 +1,42 @@
-# static-web-game
-A collection of foundational vanilla JavaScript web applications, featuring classic interactive games like Blackjack and Rock Paper Scissors alongside functional utilities. Built with standard HTML, CSS, and DOM manipulation.
+# ARCADE.JS
+
+A neon-styled collection of foundational vanilla-JavaScript web games and toys — built with
+plain HTML, CSS and DOM manipulation. No frameworks, no build step.
+
+Open `index.html` in a browser to play.
+
+## Games & toys
+
+| Game | Description |
+| --- | --- |
+| **King of Fighters — Arena** | 🆕 A local two-player, canvas-based fighting game. Health bars, round timer, blocking, KO and best-of-three matches. |
+| **Blackjack** | Classic hit / stand / deal card game against the dealer. |
+| **Rock · Paper · Scissors** | Play against the computer. |
+| **Change the Buttons Color** | Recolor a set of buttons at random or on demand. |
+| **Image Generator** | Append random images to the page. |
+| **Age in Days** | Enter your birthday, get your age in days. |
+
+## Fighting game controls
+
+It's a shared-keyboard, 2-player brawler.
+
+| Action | Player 1 (KYO) | Player 2 (IORI) |
+| --- | --- | --- |
+| Move left / right | `A` / `D` | `J` / `L` |
+| Jump | `W` | `I` |
+| Block / crouch | `S` | `K` |
+| Punch | `F` | `O` |
+| Kick | `G` | `P` |
+
+Punches are fast and light; kicks hit harder but are slower. Hold **block** while facing your
+opponent to soak most of the damage. First to win two rounds takes the match.
+
+## Project structure
+
+```
+index.html      – single-page hub for every game
+CSS/style.css   – neon arcade design system + component styles
+JS/script.js    – logic for the classic games (blackjack, RPS, etc.)
+JS/fighting.js  – the King of Fighters arena engine (canvas)
+static/         – card images and sound effects
+```

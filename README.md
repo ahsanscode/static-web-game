@@ -3,6 +3,8 @@
 A neon-styled collection of foundational vanilla-JavaScript web games and toys — built with
 plain HTML, CSS and DOM manipulation. No frameworks, no build step.
 
+> Project name: **ARCADE.JS** (repository may still be named `static-web-game`).
+
 Open `index.html` in a browser to play.
 
 ## Games & toys

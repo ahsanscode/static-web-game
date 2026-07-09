@@ -87,6 +87,18 @@ function srcx(botchoice) {
 
 
 let rpsScore = { you: 0, cpu: 0, draw: 0 };
+const rpsSounds = {
+    win: new Audio("./static/win.wav"),
+    lose: new Audio("./static/hit.wav"),
+    draw: new Audio("./static/deal.wav")
+};
+
+function playRpsSound(outcome) {
+    const sound = rpsSounds[outcome];
+    if (!sound) return;
+    sound.currentTime = 0;
+    sound.play().catch(() => {});
+}
 
 function renderRpsScore() {
     document.getElementById('rps-you-score').textContent = rpsScore.you;
@@ -104,6 +116,7 @@ function game(yourChoice) {
     else if (outcome === 'lose') rpsScore.cpu++;
     else rpsScore.draw++;
     renderRpsScore();
+    playRpsSound(outcome);
 
     // Show the round below the (still-clickable) choices.
     const verdict = outcome === 'win' ? 'You win!' : outcome === 'lose' ? 'You lose!' : "It's a draw!";
@@ -241,6 +254,7 @@ const you = bjGame["you"];
 
 const dealer = bjGame["dealer"];
 const hitsound = new Audio("./static/hit.wav");
+let bjRoundOver = false;
 
 function showcard(card, player) {
 
@@ -366,7 +380,14 @@ function finalresult(winner) {
 
 
 function bj_stand() {
-    dealerfunc();
+    if (bjRoundOver || (you['score'] === 0 && dealer['score'] === 0)) {
+        return;
+    }
+    while (dealer['score'] < 16) {
+        dealerfunc();
+    }
+    finalresult(winnerfunc());
+    bjRoundOver = true;
 }
 
 document.querySelector('#bj-stand-btn').addEventListener('click', bj_stand)
@@ -388,14 +409,24 @@ function bj_deal() {
     document.querySelector(dealer['scoreSpan']).textContent = '0';
     document.querySelector(dealer['scoreSpan']).style.color = 'white';
     dealsound.play();
-    finalresult(winnerfunc());
+    document.querySelector('#finalresult').textContent = "Let's play";
+    document.querySelector('#finalresult').style.color = 'white';
     bjGame['you']['score'] = 0;
     bjGame['dealer']['score'] = 0;
+    bjRoundOver = false;
 }
 
 
 document.querySelector('#bj-deal-btn').addEventListener('click', bj_deal)
 
+function bj_reset() {
+    document.querySelector('#wons').textContent = '0';
+    document.querySelector('#losses').textContent = '0';
+    document.querySelector('#Draws').textContent = '0';
+    bj_deal();
+}
+
+document.querySelector('#bj-reset-btn').addEventListener('click', bj_reset)
 
 
 

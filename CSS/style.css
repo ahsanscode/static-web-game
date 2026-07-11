@@ -621,6 +621,12 @@ main { position: relative; z-index: 1; }
     margin: 0 0 22px;
     letter-spacing: 0.06em;
 }
+.fight-mode-btns {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
 
 /* controls guide */
 .controls-grid {

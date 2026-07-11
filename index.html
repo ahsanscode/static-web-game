@@ -43,7 +43,7 @@
 <section class="container-fight" id="fighting">
     <div class="section-tag new">New · 2 Players</div>
     <h2>King of Fighters — Arena</h2>
-    <p class="section-sub">Grab a friend, share the keyboard, settle it in the best of three.</p>
+    <p class="section-sub">Grab a friend and share the keyboard — or hit “vs Computer” and let the CPU control Player&nbsp;2.</p>
 
     <div class="fight-stage">
         <div class="fight-hud">
@@ -54,7 +54,7 @@
             </div>
             <div class="hud-timer" id="fight-timer">60</div>
             <div class="hud-player right">
-                <div class="hud-top"><span style="color:var(--pink)">IORI</span>
+                <div class="hud-top"><span style="color:var(--pink)" id="p2-name">IORI</span>
                     <span class="pips" id="p2-pips"></span></div>
                 <div class="health-bar"><div class="health-fill" id="p2-health"></div></div>
             </div>
@@ -65,8 +65,11 @@
         <div class="fight-overlay" id="fight-overlay">
             <div class="fight-overlay-inner">
                 <h3 id="fight-msg">King of Fighters</h3>
-                <p id="fight-sub">Local 2-player · Best of three</p>
-                <button class="btn-neon pink" id="fight-start">FIGHT!</button>
+                <p id="fight-sub">Play a friend or the computer · Best of three</p>
+                <div class="fight-mode-btns">
+                    <button class="btn-neon pink" id="fight-start">👥 2 Players</button>
+                    <button class="btn-neon" id="fight-start-cpu">🤖 vs Computer</button>
+                </div>
             </div>
         </div>
     </div>
@@ -81,7 +84,7 @@
             <div class="key-row"><span>Kick</span><span class="keys"><kbd>G</kbd></span></div>
         </div>
         <div class="control-card p2">
-            <h4>◈ Player 2 — IORI</h4>
+            <h4>◈ Player 2 — IORI <small style="color:var(--muted);font-size:0.72rem">(or CPU)</small></h4>
             <div class="key-row"><span>Move</span><span class="keys"><kbd>J</kbd><kbd>L</kbd></span></div>
             <div class="key-row"><span>Jump</span><span class="keys"><kbd>I</kbd></span></div>
             <div class="key-row"><span>Block / Crouch</span><span class="keys"><kbd>K</kbd></span></div>

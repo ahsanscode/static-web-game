@@ -9,7 +9,7 @@ Open `index.html` in a browser to play.
 
 | Game | Description |
 | --- | --- |
-| **King of Fighters — Arena** | 🆕 A local two-player, canvas-based fighting game. Health bars, round timer, blocking, KO and best-of-three matches. |
+| **King of Fighters — Arena** | 🆕 A canvas-based fighting game. Play a friend on one keyboard **or fight the computer**. Health bars, round timer, blocking, KO and best-of-three matches. |
 | **Blackjack** | Classic hit / stand / deal card game against the dealer. |
 | **Rock · Paper · Scissors** | Play against the computer. |
 | **Change the Buttons Color** | Recolor a set of buttons at random or on demand. |
@@ -18,7 +18,8 @@ Open `index.html` in a browser to play.
 
 ## Fighting game controls
 
-It's a shared-keyboard, 2-player brawler.
+Pick a mode on the start screen: **👥 2 Players** (shared keyboard) or **🤖 vs Computer**
+(the CPU controls Player 2 — it approaches, attacks, blocks and retreats on its own).
 
 | Action | Player 1 (KYO) | Player 2 (IORI) |
 | --- | --- | --- |

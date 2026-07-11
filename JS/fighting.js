@@ -59,9 +59,10 @@
         if (state !== 'fight') return;
         if (k === 'f') p1.startAttack('punch');
         if (k === 'g') p1.startAttack('kick');
+        if (k === 'w') p1.jump();
+        if (p2.isCpu) return; // the computer owns Player 2
         if (k === 'o') p2.startAttack('punch');
         if (k === 'p') p2.startAttack('kick');
-        if (k === 'w') p1.jump();
         if (k === 'i') p2.jump();
     }
 
@@ -74,6 +75,8 @@
             this.facing = opts.facing;     // 1 = right, -1 = left
             this.controls = opts.controls; // {left,right,jump,block,punch,kick}
             this.width = 52;
+            this.isCpu = false;      // when true, inputs come from aiKeys (the CPU driver)
+            this.aiKeys = new Set();
             this.reset();
         }
 
@@ -94,6 +97,12 @@
             this.blockFlash = 0;
             this.ko = false;
             this.walkPhase = 0;
+            this.aiKeys.clear();
+        }
+
+        // Reads either the human keyboard or the CPU's virtual keys.
+        pressed(k) {
+            return this.isCpu ? this.aiKeys.has(k) : keys.has(k);
         }
 
         jump() {
@@ -112,7 +121,7 @@
         }
 
         get crouching() {
-            return keys.has(this.controls.block) && this.onGround && this.hitStun <= 0 && !this.ko;
+            return this.pressed(this.controls.block) && this.onGround && this.hitStun <= 0 && !this.ko;
         }
 
         getHurtbox() {
@@ -186,8 +195,8 @@
             const canAct = this.hitStun <= 0 && this.attackTimer <= 0 && !this.crouching;
             const speed = 3.7;
             if (canAct) {
-                if (keys.has(this.controls.left)) { this.vx = -speed; this.walkPhase += 0.3; }
-                else if (keys.has(this.controls.right)) { this.vx = speed; this.walkPhase += 0.3; }
+                if (this.pressed(this.controls.left)) { this.vx = -speed; this.walkPhase += 0.3; }
+                else if (this.pressed(this.controls.right)) { this.vx = speed; this.walkPhase += 0.3; }
                 else { this.vx *= this.onGround ? 0.6 : 0.9; }
             } else {
                 this.vx *= this.onGround ? 0.75 : 0.95;
@@ -397,6 +406,8 @@
         msg: document.getElementById('fight-msg'),
         sub: document.getElementById('fight-sub'),
         start: document.getElementById('fight-start'),
+        startCpu: document.getElementById('fight-start-cpu'),
+        p2name: document.getElementById('p2-name'),
         p1pips: document.getElementById('p1-pips'),
         p2pips: document.getElementById('p2-pips')
     };
@@ -409,6 +420,53 @@
     let bigText = '';      // FIGHT! / K.O. etc.
     let bigTextTimer = 0;
     let scores = { p1: 0, p2: 0 };
+
+    /* ---- computer opponent ------------------------------------------
+       Drives Player 2 through the same input path as a human: it sets
+       virtual keys (aiKeys) for movement/blocking and calls the same
+       startAttack/jump methods, so it obeys identical rules. */
+    let cpuPlan = 'approach';   // approach | retreat | block | attack | wait
+    let cpuDecide = 0;          // frames until the next decision
+    let cpuAttackCd = 0;        // frames until it may swing again
+
+    function cpuUpdate() {
+        const ai = p2.aiKeys;
+        ai.clear();
+        if (!p2.isCpu || state !== 'fight' || p2.ko || p2.hitStun > 0) return;
+
+        const dist = Math.abs(p1.x - p2.x);
+        const toward = p1.x > p2.x ? p2.controls.right : p2.controls.left;
+        const away = p1.x > p2.x ? p2.controls.left : p2.controls.right;
+
+        if (cpuAttackCd > 0) cpuAttackCd--;
+
+        if (--cpuDecide <= 0) {
+            cpuDecide = 10 + Math.floor(Math.random() * 20);
+            const r = Math.random();
+            if (dist > 130) cpuPlan = r < 0.9 ? 'approach' : 'wait';
+            else if (r < 0.55) cpuPlan = 'attack';
+            else if (r < 0.75) cpuPlan = 'block';
+            else if (r < 0.9) cpuPlan = 'approach';
+            else cpuPlan = 'retreat';
+        }
+
+        // reflex: has a chance each frame to guard a close incoming attack
+        if (p1.attackTimer > 0 && dist < 150 && Math.random() < 0.1) cpuPlan = 'block';
+
+        if (cpuPlan === 'approach') ai.add(toward);
+        else if (cpuPlan === 'retreat') ai.add(away);
+        else if (cpuPlan === 'block') ai.add(p2.controls.block);
+        else if (cpuPlan === 'attack') {
+            if (dist > 115) ai.add(toward);
+            else if (cpuAttackCd <= 0) {
+                p2.startAttack(Math.random() < 0.5 ? 'punch' : 'kick');
+                cpuAttackCd = 24 + Math.floor(Math.random() * 22);
+            }
+        }
+
+        // occasional hop to mix things up
+        if (p2.onGround && Math.random() < 0.005) p2.jump();
+    }
 
     function setPips() {
         function pip(n) { return '<i class="' + (n ? 'on' : '') + '"></i>'; }
@@ -423,7 +481,10 @@
 
     function showBig(text, frames) { bigText = text; bigTextTimer = frames; }
 
-    function startMatch() {
+    function startMatch(vsCpu) {
+        p2.isCpu = vsCpu;
+        p2.name = vsCpu ? 'IORI · CPU' : 'IORI';
+        if (el.p2name) el.p2name.textContent = p2.name;
         scores = { p1: 0, p2: 0 };
         setPips();
         beginRound();
@@ -459,26 +520,22 @@
         if (scores.p1 >= WINS_NEEDED || scores.p2 >= WINS_NEEDED) {
             state = 'matchover';
             const champ = scores.p1 > scores.p2 ? p1 : p2;
-            showOverlay(champ.name + ' WINS!', 'Best of three · ' + scores.p1 + ' — ' + scores.p2, 'REMATCH');
+            showOverlay(champ.name + ' WINS!', 'Best of three · ' + scores.p1 + ' — ' + scores.p2 + ' · Pick a mode to rematch');
             return true;
         }
         return false;
     }
 
-    function showOverlay(msg, sub, btn) {
+    function showOverlay(msg, sub) {
         if (!el.overlay) return;
         el.overlay.classList.remove('hidden');
         if (el.msg) el.msg.textContent = msg;
         if (el.sub) el.sub.textContent = sub || '';
-        if (el.start) el.start.textContent = btn || 'FIGHT!';
     }
     function hideOverlay() { if (el.overlay) el.overlay.classList.add('hidden'); }
 
-    if (el.start) {
-        el.start.addEventListener('click', function () {
-            startMatch();
-        });
-    }
+    if (el.start) el.start.addEventListener('click', function () { startMatch(false); });
+    if (el.startCpu) el.startCpu.addEventListener('click', function () { startMatch(true); });
 
     /* ---- combat resolution ----------------------------------------- */
     function overlaps(a, b) {
@@ -595,6 +652,7 @@
         }
 
         // updates
+        cpuUpdate();
         p1.update(1, p2);
         p2.update(1, p1);
         if (state === 'fight') {
@@ -662,6 +720,6 @@
     setPips();
     updateHealthBars();
     if (el.timer) el.timer.textContent = ROUND_TIME;
-    showOverlay('KING OF FIGHTERS', 'Local 2-player · Best of three', 'FIGHT!');
+    showOverlay('KING OF FIGHTERS', 'Play a friend or the computer · Best of three');
     requestAnimationFrame(loop);
 })();
